@@ -34,6 +34,14 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.QrCode)
+        </dt>
+
+        <dd>
+            <img src="https://chart.googleapis.com/chart?cht=qr&chl=@Model.QrCode&chs=100x100" width='100' height='100' />
+        </dd>
+
     </dl>
 </div>
 <p>

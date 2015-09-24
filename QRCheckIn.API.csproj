@@ -61,7 +61,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -180,6 +179,10 @@
     <Compile Include="Migrations\201509241816003_Initial.Designer.cs">
       <DependentUpon>201509241816003_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509242236098_QrCode.cs" />
+    <Compile Include="Migrations\201509242236098_QrCode.Designer.cs">
+      <DependentUpon>201509242236098_QrCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendee.cs" />
     <Compile Include="Models\Event.cs" />
@@ -248,6 +251,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201509241816003_Initial.resx">
       <DependentUpon>201509241816003_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509242236098_QrCode.resx">
+      <DependentUpon>201509242236098_QrCode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -7,8 +7,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Esponce.QRCode;
 using QRCheckIn.Models;
+using GoogleQRGenerator;
 
 namespace QRCheckIn.Controllers
 {
@@ -54,6 +54,10 @@ namespace QRCheckIn.Controllers
             {
                 db.Attendees.Add(attendee);
                 db.SaveChanges();
+                var qrCode = GenerateCode(attendee.Id);
+                attendee.QrCode = qrCode;
+                db.SaveChanges();
+                                
                 return RedirectToAction("Index");
             }
 
@@ -117,11 +121,12 @@ namespace QRCheckIn.Controllers
             return RedirectToAction("Index");
         }
 
-        public Stream GenerateCode()
+        public string GenerateCode(int id)
         {
-            var client = new ();
-            var stream = client.Generate("Hello World");
-            return stream;
+            var googleQr = new GoogleQr($"www.qrcheckin.azurewebsites.net/attendees/checkin/{id}", "100x100", true);
+            //var qrImage = googleQr.Render();
+            var qrPath = googleQr.ToString();
+            return qrPath;
         }
 
         public ActionResult CheckIn(int id)
