@@ -129,6 +129,21 @@ namespace QRCheckIn.Controllers
             return qrPath;
         }
 
+        public ActionResult PrintBadge(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Attendee attendee = db.Attendees.Find(id);
+            if (attendee == null)
+            {
+                return HttpNotFound();
+            }
+            return View(attendee);
+        }
+
+
         public ActionResult CheckIn(int id)
         {
             DateTime time = DateTime.Now;
