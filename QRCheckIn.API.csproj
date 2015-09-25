@@ -186,6 +186,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendee.cs" />
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\TodaysEventsVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +196,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="img\tToberLogo.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -248,6 +250,9 @@
     <Content Include="Views\Events\Edit.cshtml" />
     <Content Include="Views\Events\Index.cshtml" />
     <Content Include="Views\Attendees\PrintBadge.cshtml" />
+    <Content Include="Views\Events\TodaysEvents.cshtml" />
+    <Content Include="Views\Events\ChooseEvent.cshtml" />
+    <Content Include="Views\Events\CheckIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201509241816003_Initial.resx">

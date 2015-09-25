@@ -1,0 +1,33 @@
+﻿@model IEnumerable<QRCheckIn.Models.TodaysEventsVM>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ChooseEvent</title>
+</head>
+<body>
+    <div class="panel col-md-offset-4 col-md-4">
+        <div align="center">
+            <img src="~/img/tToberLogo.jpg" /><br />
+            <h1>Choose Your Event</h1>
+            @foreach (var item in Model)
+            {
+                <div class="row">
+                    <h3>@item.EventName</h3>
+                    <div class="form-inline">
+                        <div class="form-group">
+                                <input data="@item" type="submit" value="checkin"/>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>

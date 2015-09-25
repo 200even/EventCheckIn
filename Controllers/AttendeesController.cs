@@ -123,7 +123,7 @@ namespace QRCheckIn.Controllers
 
         public string GenerateCode(int id)
         {
-            var googleQr = new GoogleQr($"www.qrcheckin.azurewebsites.net/attendees/checkin/{id}", "100x100", true);
+            var googleQr = new GoogleQr(/*$"www.qrcheckin.azurewebsites.net/events/chooseevent/{id}"*/$"localhost:62809/events/chooseevent/{id}", "100x100", true);
             //var qrImage = googleQr.Render();
             var qrPath = googleQr.ToString();
             return qrPath;
@@ -143,16 +143,8 @@ namespace QRCheckIn.Controllers
             return View(attendee);
         }
 
+        
 
-        public ActionResult CheckIn(int id)
-        {
-            DateTime time = DateTime.Now;
-            var thisEvent = db.Events.FirstOrDefault(e => e.StartTime.Date == time.Date);
-            var attendee = thisEvent.Attendees.FirstOrDefault(a => a.Id == id);
-            thisEvent.Attendees.Add(attendee);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
         protected override void Dispose(bool disposing)
         {

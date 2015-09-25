@@ -20,6 +20,34 @@ namespace QRCheckIn.Controllers
             return View(db.Events.ToList());
         }
 
+        // GET: TodaysEvents
+        public ActionResult ChooseEvent(int? id)
+        {
+            DateTime time = DateTime.Now;
+            var todaysEvents = db.Events.Where(e => DbFunctions.TruncateTime(e.StartTime) == time.Date);
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+            List<TodaysEventsVM> MyEvents = new List<TodaysEventsVM>();
+            foreach (var e in todaysEvents)
+            {
+                MyEvents.Add(new TodaysEventsVM() {AttendeeId = id, EventId = e.Id, EventName = e.Name});
+            }
+            return View(MyEvents);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CheckIn(TodaysEventsVM myEvent)
+        {
+            var attendee = db.Attendees.FirstOrDefault(a => a.Id == myEvent.AttendeeId);
+            var thisEvent = db.Events.FirstOrDefault(e => e.Id == myEvent.EventId);
+            thisEvent.Attendees.Add(attendee);
+            db.SaveChanges();
+            return View(myEvent);
+        }
+
         // GET: Events/Details/5
         public ActionResult Details(int? id)
         {
