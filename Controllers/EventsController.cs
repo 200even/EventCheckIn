@@ -39,13 +39,23 @@ namespace QRCheckIn.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CheckIn(TodaysEventsVM myEvent)
+        public ActionResult ChooseEvent(TodaysEventsVM myEvent)
         {
-            var attendee = db.Attendees.FirstOrDefault(a => a.Id == myEvent.AttendeeId);
-            var thisEvent = db.Events.FirstOrDefault(e => e.Id == myEvent.EventId);
-            thisEvent.Attendees.Add(attendee);
-            db.SaveChanges();
-            return View(myEvent);
+            if (ModelState.IsValid)
+            {
+                var attendee = db.Attendees.FirstOrDefault(a => a.Id == myEvent.AttendeeId);
+                var thisEvent = db.Events.FirstOrDefault(e => e.Id == myEvent.EventId);
+                thisEvent.Attendees.Add(attendee);
+                db.SaveChanges();
+                return RedirectToAction("Confirmation");
+            }
+           
+            return View();
+        }
+
+        public ActionResult Confirmation()
+        {
+            return View();
         }
 
         // GET: Events/Details/5

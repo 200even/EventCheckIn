@@ -1,4 +1,5 @@
-﻿@model IEnumerable<QRCheckIn.Models.TodaysEventsVM>
+﻿@using QRCheckIn.Models
+@model List<QRCheckIn.Models.TodaysEventsVM>
 
 @{
     Layout = null;
@@ -12,22 +13,28 @@
     <title>ChooseEvent</title>
 </head>
 <body>
-    <div class="panel col-md-offset-4 col-md-4">
-        <div align="center">
-            <img src="~/img/tToberLogo.jpg" /><br />
-            <h1>Choose Your Event</h1>
-            @foreach (var item in Model)
-            {
-                <div class="row">
-                    <h3>@item.EventName</h3>
-                    <div class="form-inline">
-                        <div class="form-group">
-                                <input data="@item" type="submit" value="checkin"/>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
+<div class="panel col-md-offset-4 col-md-4">
+    <div align="center">
+        <img src="~/img/tToberLogo.jpg"/><br/>
+        <h1>Choose Your Event</h1>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            foreach (var item in Model)
+             {
+                 <div class="form-horizontal">
+                     <h3>@item.EventName</h3>
+                     <div class="form-group">
+                         <input type="hidden" name="EventId" value="@item.EventId"/>
+                         <input type="hidden" name="AttendeeId" value="@item.AttendeeId"/>
+                         <input type="submit" class="btn btn-danger" data="@item" value="Check In"/>
+                     </div>
+                 </div>
+
+             }
+        }
     </div>
+</div>
 </body>
 </html>
