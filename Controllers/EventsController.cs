@@ -20,7 +20,7 @@ namespace QRCheckIn.Controllers
             return View(db.Events.ToList());
         }
 
-        // GET: TodaysEvents
+        // GET: ChooseEvent
         public ActionResult ChooseEvent(int? id)
         {
             DateTime time = DateTime.Now;
@@ -37,6 +37,7 @@ namespace QRCheckIn.Controllers
             return View(MyEvents);
         }
 
+        // POST: ChooseEvent
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ChooseEvent(TodaysEventsVM myEvent)

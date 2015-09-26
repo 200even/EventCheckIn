@@ -34,7 +34,25 @@
             @Html.DisplayFor(model => model.EndTime)
         </dd>
 
+
     </dl>
+    <h2>@Html.DisplayFor(model => model.Attendees)</h2>
+    <table class="table">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+        @foreach (var a in Model.Attendees.ToList())
+        {
+            <tr>
+                <td>@a.FirstName</td>
+                <td>@a.LastName</td>
+                <td>@a.Email</td>
+            </tr>
+        }
+
+    </table>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
