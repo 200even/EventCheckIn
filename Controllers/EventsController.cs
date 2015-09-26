@@ -44,8 +44,7 @@ namespace QRCheckIn.Controllers
             if (ModelState.IsValid)
             {
                 var attendee = db.Attendees.FirstOrDefault(a => a.Id == myEvent.AttendeeId);
-                var thisEvent = db.Events.FirstOrDefault(e => e.Id == myEvent.EventId);
-                thisEvent.Attendees.Add(attendee);
+                attendee.Events.Add(db.Events.FirstOrDefault(e => e.Id == myEvent.EventId));
                 db.SaveChanges();
                 return RedirectToAction("Confirmation");
             }
