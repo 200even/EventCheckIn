@@ -123,7 +123,7 @@ namespace QRCheckIn.Controllers
 
         public string GenerateCode(int id)
         {
-            var googleQr = new GoogleQr(/*$"www.qrcheckin.azurewebsites.net/events/chooseevent/{id}"*/$"localhost:62809/events/chooseevent/{id}", "100x100", true);
+            var googleQr = new GoogleQr($"techtober.azurewebsites.net/events/chooseevent/{id}", "100x100", true);
             //var qrImage = googleQr.Render();
             var qrPath = googleQr.ToString();
             return qrPath;

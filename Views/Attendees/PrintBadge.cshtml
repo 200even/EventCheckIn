@@ -10,29 +10,27 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>PrintBadge</title>
+    @Styles.Render("~/Content/css")
 </head>
 <body>
-    <div>
+    <div class="col-md-6">
+
         
-        <dl class="dl-horizontal" align ="center">
+        <div class="panel col-md-12" align="center">
+            <p><img style="max-width: 150px" src="~/img/tToberLogo.jpg" /></p>
+            <h1>
+                <strong>@Html.DisplayFor(model => model.FirstName)</strong> @Html.DisplayFor(model => model.LastName)
+            </h1>
     
-            <dd>
-                @Html.DisplayFor(model => model.FirstName)
-            </dd>
-    
-            <dd>
-                @Html.DisplayFor(model => model.LastName)
-            </dd>
-    
-            <dd>
+            <h2>
                 @Html.DisplayFor(model => model.Email)
-            </dd>
+            </h2>
     
             <dd>
-                <img src="https://chart.googleapis.com/chart?cht=qr&chl=@Model.QrCode&chs=100x100" width='100' height='100' />
+                <img src="https://chart.googleapis.com/chart?cht=qr&chl=@Model.QrCode&chs=100x100" width='200' height='200' />
             </dd>
     
-        </dl>
+        </div>
     </div>
 
 </body>
