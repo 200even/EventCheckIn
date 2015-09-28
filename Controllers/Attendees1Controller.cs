@@ -13,6 +13,7 @@ using QRCheckIn.Models;
 
 namespace QRCheckIn.Controllers
 {
+    [Authorize]
     public class Attendees1Controller : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
