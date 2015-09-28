@@ -121,7 +121,7 @@ namespace QRCheckIn.Controllers
             return RedirectToAction("Index");
         }
 
-        public static string GenerateCode(int id)
+        public string GenerateCode(int id)
         {
             var googleQr = new GoogleQr($"techtober.azurewebsites.net/events/chooseevent/{id}", "100x100", true);
             //var qrImage = googleQr.Render();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -79,10 +78,8 @@ namespace QRCheckIn.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             db.Attendees.Add(attendee);
-            db.SaveChanges();
-            var qrCode = AttendeesController.GenerateCode(attendee.Id);
-            attendee.QrCode = qrCode;
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = attendee.Id }, attendee);
