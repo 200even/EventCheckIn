@@ -25,7 +25,7 @@ namespace EventCheckIn.Controllers
         // GET: ChooseEvent
         public ActionResult ChooseEvent(int? id)
         {
-            DateTime time = DateTime.Now.ToLocalTime();
+            DateTime time = DateTime.Now.AddHours(-5);
             var todaysEvents = db.Events.Where(e => DbFunctions.TruncateTime(e.StartTime) == time.Date);
             if (id == null)
             {
