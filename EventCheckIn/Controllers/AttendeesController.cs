@@ -143,6 +143,11 @@ namespace EventCheckIn.Controllers
             return View(attendee);
         }
 
+        public ActionResult Success()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

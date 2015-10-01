@@ -318,6 +318,7 @@
     <Content Include="Views\Events\TodaysEvents.cshtml" />
     <Content Include="Views\Events\FormTest.cshtml" />
     <Content Include="Views\Events\TempMessage.cshtml" />
+    <Content Include="Views\Attendees\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

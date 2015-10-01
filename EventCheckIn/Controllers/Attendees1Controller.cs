@@ -86,15 +86,27 @@ namespace EventCheckIn.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            db.Attendees.Add(attendee);
-            db.SaveChanges();
-            var qrCode = AttendeesController.GenerateCode(attendee.Id);
-            attendee.QrCode = qrCode;
-            db.SaveChanges();
-            var memoryStream = GenerateBadge(attendee);
-            SendEmail(memoryStream, attendee);
-            return Ok();
+            try {
+                db.Attendees.Add(attendee);
+                db.SaveChanges();
+                var qrCode = AttendeesController.GenerateCode(attendee.Id);
+                attendee.QrCode = qrCode;
+                db.SaveChanges();
+                var memoryStream = GenerateBadge(attendee);
+                SendEmail(memoryStream, attendee);
+                //string result = $"Thanks {attendee.FirstName}! You should receive a confirmation email shortly.";
+                //var resp = new HttpResponseMessage(HttpStatusCode.OK);
+                //resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
+                //return resp;
+                var response = new HttpResponseMessage();
+                response.Content = new StringContent($"<html><body><h1>Thanks {attendee.FirstName}!</h1><h2>You should receive a confirmation email shortly.</h2></body></html>");
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+                return response;
+            }
+            catch
+            {
+                return BadRequest();
+            }
 
         }
 
