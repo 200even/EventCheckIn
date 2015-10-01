@@ -9,6 +9,14 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using EventCheckIn.Models;
+using System.Net.Http.Headers;
+using System.Text;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.Web;
+using System.Net.Mail;
+using System.Configuration;
 
 namespace EventCheckIn.Controllers
 {
@@ -72,7 +80,7 @@ namespace EventCheckIn.Controllers
 
         // POST: api/Attendees1
         [ResponseType(typeof(Attendee))]
-        public IHttpActionResult PostAttendee(Attendee attendee)
+        public dynamic PostAttendee(Attendee attendee)
         {
             if (!ModelState.IsValid)
             {
@@ -81,8 +89,62 @@ namespace EventCheckIn.Controllers
 
             db.Attendees.Add(attendee);
             db.SaveChanges();
+            var qrCode = AttendeesController.GenerateCode(attendee.Id);
+            attendee.QrCode = qrCode;
+            db.SaveChanges();
+            var memoryStream = GenerateBadge(attendee);
+            SendEmail(memoryStream, attendee);
+            return Ok();
 
-            return CreatedAtRoute("DefaultApi", new { id = attendee.Id }, attendee);
+        }
+
+        private static MemoryStream GenerateBadge(Attendee attendee)
+        {
+            Document doc = new Document(PageSize.POSTCARD, 10, 10, 42, 35);
+            MemoryStream memoryStream = new MemoryStream();
+            PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+            doc.Open();
+            Uri imageLocation = new Uri("http://static1.squarespace.com/static/5421d09de4b012de014df4dc/t/55e6ffb1e4b0bef28928ccf4/1441202099710/");
+            Image logo = Image.GetInstance(imageLocation);
+            logo.Alignment = Element.ALIGN_CENTER;
+            logo.ScaleAbsolute(120f, 155.25f);
+            doc.Add(logo);
+            Paragraph name = new Paragraph($"{attendee.FirstName} {attendee.LastName}");
+            name.Alignment = Element.ALIGN_CENTER;
+            doc.Add(name);
+            Paragraph email = new Paragraph($"{attendee.Email}");
+            email.Alignment = Element.ALIGN_CENTER;
+            doc.Add(email);
+            Image qr = Image.GetInstance(attendee.QrCode);
+            qr.Alignment = Element.ALIGN_CENTER;
+            doc.Add(qr);
+            writer.CloseStream = false;
+            doc.Close();
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
+
+        public static void SendEmail(MemoryStream memoryStream, Attendee attendee)
+        {
+            string email = ConfigurationManager.AppSettings["email"];
+            string password = ConfigurationManager.AppSettings["password"];
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(email);
+            SmtpClient smtp = new SmtpClient();
+            smtp.Port = 587;
+            smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential(mail.From.ToString(), password);
+            smtp.Host = "smtp.gmail.com";
+            mail.To.Add(new MailAddress($"{attendee.Email}"));
+            mail.Subject = "Thanks for registering for Techtober!";
+            mail.IsBodyHtml = true;
+            string st = "Your registration is confirmed. Please have the attached checkin document ready when you arrive at each event.";
+            mail.Body = st;
+            Attachment attach = new Attachment(memoryStream, new System.Net.Mime.ContentType("application/pdf"));
+            mail.Attachments.Add(attach);
+            smtp.Send(mail);
         }
 
         // DELETE: api/Attendees1/5
@@ -100,6 +162,7 @@ namespace EventCheckIn.Controllers
 
             return Ok(attendee);
         }
+
 
         protected override void Dispose(bool disposing)
         {

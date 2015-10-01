@@ -121,7 +121,7 @@ namespace EventCheckIn.Controllers
             return RedirectToAction("Index");
         }
 
-        public string GenerateCode(int id)
+        public static string GenerateCode(int id)
         {
             var googleQr = new GoogleQr($"techtober.azurewebsites.net/events/chooseevent/{id}", "100x100", true);
             //var qrImage = googleQr.Render();
@@ -142,9 +142,6 @@ namespace EventCheckIn.Controllers
             }
             return View(attendee);
         }
-
-        
-
 
         protected override void Dispose(bool disposing)
         {

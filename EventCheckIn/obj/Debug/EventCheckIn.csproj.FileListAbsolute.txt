@@ -78,3 +78,7 @@ c:\users\scott\documents\visual studio 2015\Projects\EventCheckIn.API\EventCheck
 c:\users\scott\documents\visual studio 2015\Projects\EventCheckIn.API\EventCheckIn\bin\GoogleQRGenerator.dll
 c:\users\scott\documents\visual studio 2015\Projects\EventCheckIn.API\EventCheckIn\obj\Debug\EventCheckIn.Migrations.Rebuild.resources
 c:\users\scott\documents\visual studio 2015\Projects\EventCheckIn.API\EventCheckIn\obj\Debug\EventCheckIn.csproj.GenerateResource.Cache
+c:\users\scott\documents\visual studio 2015\Projects\EventCheckIn.API\EventCheckIn\bin\itextsharp.dll
+c:\users\scott\documents\visual studio 2015\Projects\EventCheckIn.API\EventCheckIn\bin\itextsharp.xml
+c:\users\scott\documents\visual studio 2015\Projects\EventCheckIn.API\EventCheckIn\bin\SendGrid.SmtpApi.dll
+c:\users\scott\documents\visual studio 2015\Projects\EventCheckIn.API\EventCheckIn\bin\SendGridMail.dll

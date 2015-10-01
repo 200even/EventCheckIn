@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using EventCheckIn.Models;
+using System.Net.Mail;
+using System.Configuration;
 
 namespace EventCheckIn.Controllers
 {
@@ -45,8 +47,14 @@ namespace EventCheckIn.Controllers
             if (ModelState.IsValid)
             {
                 var attendee = db.Attendees.FirstOrDefault(a => a.Id == myEvent.AttendeeId);
-                attendee.Events.Add(db.Events.FirstOrDefault(e => e.Id == myEvent.EventId));
+                Event thisEvent = db.Events.FirstOrDefault(e => e.Id == myEvent.EventId);
+                if(thisEvent.Attendees.Any(a => a.Id == attendee.Id))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                attendee.Events.Add(thisEvent);
                 db.SaveChanges();
+                SendConfirmation(attendee, thisEvent);
                 return RedirectToAction("Confirmation");
             }
            
@@ -151,6 +159,32 @@ namespace EventCheckIn.Controllers
             db.Events.Remove(@event);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult FormTest()
+        {
+            return View();
+        }
+
+        public static void SendConfirmation(Attendee attendee, Event myEvent)
+        {
+            string email = ConfigurationManager.AppSettings["email"];
+            string password = ConfigurationManager.AppSettings["password"];
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(email);
+            SmtpClient smtp = new SmtpClient();
+            smtp.Port = 587;
+            smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential(mail.From.ToString(), password);
+            smtp.Host = "smtp.gmail.com";
+            mail.To.Add(new MailAddress($"{attendee.Email}"));
+            mail.Subject = "Thanks for checking in!";
+            mail.IsBodyHtml = true;
+            string st = $"Your checkin for {myEvent.Name} is confirmed. You have attended {attendee.Events.Count()} events so far. Thank you for supporting the Little Rock tech scene!";
+            mail.Body = st;
+            smtp.Send(mail);
         }
 
         protected override void Dispose(bool disposing)
