@@ -1,0 +1,9 @@
+﻿@{
+    string message = TempData["Message"] as string;
+    if (!String.IsNullOrEmpty(message))
+    {
+        <div class="message alert-danger">
+            <p>@message</p>
+        </div>
+    }
+}

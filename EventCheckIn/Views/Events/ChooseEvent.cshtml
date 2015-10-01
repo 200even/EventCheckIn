@@ -15,28 +15,29 @@
 <body>
     <div class="panel col-md-offset-1 col-md-10">
         <div align="center">
+            @Html.Action(actionName: "TempMessage", controllerName: "Events")
             <img style="max-width: 300px" src="~/img/tToberLogo.jpg" /><br />
             <h1>Choose Your Event</h1>
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
-                    <table class="table">
-                        @foreach (var item in Model)
-                        {
-                            <tr class="form-horizontal">
-                                <td class="col-md-push-4 col-md-5">
-                                    <strong>@item.EventName</strong>
-                                </td>
-                                <td class="form-group col-md-3">
-                                    <input type="hidden" name="EventId" value="@item.EventId" />
-                                    <input type="hidden" name="AttendeeId" value="@item.AttendeeId" />
-                                    <input type="submit" class="btn btn-primary" value="Check In" />
-                                </td>
-                            </tr>
-                        }
-                    </table>
 
-            }
+            <table class="table">
+                @foreach (var item in Model)
+                {
+                    using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken();
+                        <tr class="form-horizontal">
+                            <td class="col-md-push-4 col-md-5">
+                                <strong>@item.EventName</strong>
+                            </td>
+                            <td class="form-group col-md-3">
+                                <input type="hidden" name="EventId" value="@item.EventId" />
+                                <input type="hidden" name="AttendeeId" value="@item.AttendeeId" />
+                                <input type="submit" class="btn btn-primary" value="Check In" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
         </div>
     </div>
 </body>

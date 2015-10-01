@@ -25,7 +25,7 @@ namespace EventCheckIn.Controllers
         // GET: ChooseEvent
         public ActionResult ChooseEvent(int? id)
         {
-            DateTime time = DateTime.Now;
+            DateTime time = DateTime.Now.ToLocalTime();
             var todaysEvents = db.Events.Where(e => DbFunctions.TruncateTime(e.StartTime) == time.Date);
             if (id == null)
             {
@@ -48,9 +48,10 @@ namespace EventCheckIn.Controllers
             {
                 var attendee = db.Attendees.FirstOrDefault(a => a.Id == myEvent.AttendeeId);
                 Event thisEvent = db.Events.FirstOrDefault(e => e.Id == myEvent.EventId);
-                if(thisEvent.Attendees.Any(a => a.Id == attendee.Id))
+                if(thisEvent.Attendees != null && thisEvent.Attendees.Any(a => a.Id == attendee.Id))
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    TempData["message"] = $"{attendee.FirstName} has already checked into this event({thisEvent.Name}).";
+                    return RedirectToAction("ChooseEvent");
                 }
                 attendee.Events.Add(thisEvent);
                 db.SaveChanges();
@@ -59,6 +60,12 @@ namespace EventCheckIn.Controllers
             }
            
             return View();
+        }
+
+        [ChildActionOnly]
+        public ActionResult TempMessage()
+        {
+            return PartialView();
         }
 
         public ActionResult Confirmation()

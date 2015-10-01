@@ -317,6 +317,7 @@
     <Content Include="Views\Events\Index.cshtml" />
     <Content Include="Views\Events\TodaysEvents.cshtml" />
     <Content Include="Views\Events\FormTest.cshtml" />
+    <Content Include="Views\Events\TempMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
