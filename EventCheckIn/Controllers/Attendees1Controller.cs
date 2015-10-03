@@ -17,6 +17,8 @@ using iTextSharp.text.pdf;
 using System.Web;
 using System.Net.Mail;
 using System.Configuration;
+using System.Net.Mime;
+using System.Threading;
 
 namespace EventCheckIn.Controllers
 {
@@ -86,22 +88,21 @@ namespace EventCheckIn.Controllers
             {
                 return BadRequest(ModelState);
             }
-            try {
-                db.Attendees.Add(attendee);
-                db.SaveChanges();
-                var qrCode = AttendeesController.GenerateCode(attendee.Id);
-                attendee.QrCode = qrCode;
-                db.SaveChanges();
-                var memoryStream = GenerateBadge(attendee);
-                SendEmail(memoryStream, attendee);
-                //string result = $"Thanks {attendee.FirstName}! You should receive a confirmation email shortly.";
-                //var resp = new HttpResponseMessage(HttpStatusCode.OK);
-                //resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
-                //return resp;
-                var response = new HttpResponseMessage();
-                response.Content = new StringContent($"<html><body><h1>Thanks {attendee.FirstName}!</h1><h2>You should receive a confirmation email shortly.</h2></body></html>");
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
-                return response;
+
+            db.Attendees.Add(attendee);
+            db.SaveChanges();
+            var qrCode = AttendeesController.GenerateCode(attendee.Id);
+            attendee.QrCode = qrCode;
+            db.SaveChanges();
+            //var memoryStream = GenerateBadge(attendee);
+            try
+            {
+                SendConfirmation(attendee);
+                //var response = new HttpResponseMessage();
+                //response.Content = new StringContent($"<html><body><h1>Thanks {attendee.FirstName}!</h1><h2>You should receive a confirmation email shortly.</h2></body></html>");
+                //response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+                //return response;
+                return Ok();
             }
             catch
             {
@@ -116,7 +117,7 @@ namespace EventCheckIn.Controllers
             MemoryStream memoryStream = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
             doc.Open();
-            Uri imageLocation = new Uri("http://static1.squarespace.com/static/5421d09de4b012de014df4dc/t/55e6ffb1e4b0bef28928ccf4/1441202099710/");
+            Uri imageLocation = new Uri("http://i.imgur.com/Fqk6Eqk.jpg");
             Image logo = Image.GetInstance(imageLocation);
             logo.Alignment = Element.ALIGN_CENTER;
             logo.ScaleAbsolute(120f, 155.25f);
@@ -136,27 +137,51 @@ namespace EventCheckIn.Controllers
             return memoryStream;
         }
 
-        public static void SendEmail(MemoryStream memoryStream, Attendee attendee)
+        public static void SendConfirmation(Attendee attendee)
         {
-            string email = ConfigurationManager.AppSettings["email"];
-            string password = ConfigurationManager.AppSettings["password"];
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(email);
-            SmtpClient smtp = new SmtpClient();
-            smtp.Port = 587;
-            smtp.EnableSsl = true;
-            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new NetworkCredential(mail.From.ToString(), password);
-            smtp.Host = "smtp.gmail.com";
-            mail.To.Add(new MailAddress($"{attendee.Email}"));
-            mail.Subject = "Thanks for registering for Techtober!";
-            mail.IsBodyHtml = true;
-            string st = "Your registration is confirmed. Please have the attached checkin document ready when you arrive at each event.";
-            mail.Body = st;
-            Attachment attach = new Attachment(memoryStream, new System.Net.Mime.ContentType("application/pdf"));
-            mail.Attachments.Add(attach);
-            smtp.Send(mail);
+                string email = ConfigurationManager.AppSettings["email"];
+                string password = ConfigurationManager.AppSettings["password"];
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress(email);
+                SmtpClient smtp = new SmtpClient();
+                smtp.EnableSsl = true;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(mail.From.ToString(), password);
+                smtp.Host = "smtp.gmail.com";
+                mail.To.Add(new MailAddress($"{attendee.Email}"));
+                mail.Subject = "Thanks for registering for Techtober!";
+                mail.IsBodyHtml = true;
+                string st = $"<div align='center'><img style='max - width: 150px' src='http://i.imgur.com/DSS1t1X.jpg' /><br /><p>Your registration is confirmed. Please have the below QR code ready when you arrive at each event.</p><br /><img src='https://chart.googleapis.com/chart?cht=qr&chl={attendee.QrCode}&chs=100x100' width='200' height='200' /></div>";
+                mail.Body = st;
+                //Attachment attach = new Attachment(memoryStream, new ContentType("application/pdf"));
+                //attach.Name = "Check In Badge";
+                //mail.Attachments.Add(attach);
+                smtp.Port = 587;
+                try
+                {
+                    smtp.Send(mail);
+                }
+                catch (SmtpFailedRecipientException ex)
+                {
+                    SmtpStatusCode statusCode = ex.StatusCode;
+                    if (statusCode == SmtpStatusCode.MailboxBusy ||
+                    statusCode == SmtpStatusCode.MailboxUnavailable ||
+                    statusCode == SmtpStatusCode.TransactionFailed)
+                    {
+                        // wait 5 seconds, try a second time
+                        Thread.Sleep(5000);
+                        smtp.Send(mail);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                finally
+                {
+                    mail.Dispose();
+                }
         }
 
         // DELETE: api/Attendees1/5
