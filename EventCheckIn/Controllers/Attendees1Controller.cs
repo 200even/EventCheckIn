@@ -19,6 +19,7 @@ using System.Net.Mail;
 using System.Configuration;
 using System.Net.Mime;
 using System.Threading;
+using System.Web.Http.Cors;
 
 namespace EventCheckIn.Controllers
 {
@@ -98,11 +99,11 @@ namespace EventCheckIn.Controllers
             try
             {
                 SendConfirmation(attendee);
-                //var response = new HttpResponseMessage();
-                //response.Content = new StringContent($"<html><body><h1>Thanks {attendee.FirstName}!</h1><h2>You should receive a confirmation email shortly.</h2></body></html>");
-                //response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
-                //return response;
-                return Ok();
+                var response = new HttpResponseMessage();
+                response.Content = new StringContent($"<html><body><div align='center'><img style='max - width: 150px' src='http://i.imgur.com/DSS1t1X.jpg' /><br /><h1>Thanks {attendee.FirstName}!</h1><h2>You should receive a confirmation email shortly.</h2><p><a href='http://techtober.org/#passport'>Go back</a></div></body></html>");
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+                return response;
+                //return Ok();
             }
             catch
             {
@@ -152,7 +153,7 @@ namespace EventCheckIn.Controllers
                 mail.To.Add(new MailAddress($"{attendee.Email}"));
                 mail.Subject = "Thanks for registering for Techtober!";
                 mail.IsBodyHtml = true;
-                string st = $"<div align='center'><img style='max - width: 150px' src='http://i.imgur.com/DSS1t1X.jpg' /><br /><p>Your registration is confirmed. Please have the below QR code ready when you arrive at each event.</p><br /><img src='https://chart.googleapis.com/chart?cht=qr&chl={attendee.QrCode}&chs=100x100' width='200' height='200' /></div>";
+                string st = $"<div align='center'><img style='max - width: 150px' src='http://i.imgur.com/DSS1t1X.jpg' /><br /><p>Your registration is confirmed. Please have the below QR code ready when you arrive at each event.</p><h1>{attendee.FirstName} {attendee.LastName}<br /><img src='https://chart.googleapis.com/chart?cht=qr&chl={attendee.QrCode}&chs=100x100' width='200' height='200' /><p></div><footer>Event check-in backend services created for Techtober by <a href='mailto:esfergus@gmail.com?Subject=Event%20Check-in%20Service' target='_top'>Scott Ferguson</a> in Little Rock, AR.";
                 mail.Body = st;
                 //Attachment attach = new Attachment(memoryStream, new ContentType("application/pdf"));
                 //attach.Name = "Check In Badge";

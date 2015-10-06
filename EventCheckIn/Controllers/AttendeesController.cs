@@ -123,7 +123,7 @@ namespace EventCheckIn.Controllers
 
         public static string GenerateCode(int id)
         {
-            var googleQr = new GoogleQr($"techtober.azurewebsites.net/events/chooseevent/{id}", "100x100", true);
+            var googleQr = new GoogleQr($"techtober.azurewebsites.net/events/chooseevent/{id}", "200x200", true);
             //var qrImage = googleQr.Render();
             var qrPath = googleQr.ToString();
             return qrPath;
