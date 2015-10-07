@@ -189,7 +189,7 @@ namespace EventCheckIn.Controllers
             mail.To.Add(new MailAddress($"{attendee.Email}"));
             mail.Subject = "Thanks for checking in!";
             mail.IsBodyHtml = true;
-            string st = $"Your checkin for {myEvent.Name} is confirmed. You have attended {attendee.Events.Count()} events so far. Thank you for supporting the Little Rock tech scene!";
+            string st = $"<div align='center'><img src='http://i.imgur.com/DSS1t1X.jpg' /></div><br /><div align='justified'><p>Your check-in for {myEvent.Name} is confirmed. You have attended {attendee.Events.Count()} events so far. <strong>Thank you</strong> for supporting the Little Rock tech scene!</p></div><footer><sub>Event check-in backend services created for Techtober by <a href='mailto:esfergus@gmail.com?Subject=Event%20Check-in%20Service' target='_top'>Scott Ferguson</a> in Little Rock, AR.</sub></footer>";
             mail.Body = st;
             smtp.Send(mail);
         }

@@ -21,7 +21,7 @@ namespace EventCheckIn
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            var cors = new EnableCorsAttribute(origins: "http://techtober.org", headers: "*", methods: "POST");
+            var cors = new EnableCorsAttribute(origins: "*", headers: "*", methods: "POST");
             config.EnableCors(cors);
 
             config.Routes.MapHttpRoute(
