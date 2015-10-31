@@ -162,8 +162,6 @@ C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\bin\Microsoft.Owin.Sec
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\bin\System.Web.Http.Owin.xml
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\obj\Debug\EventCheckIn.csprojResolveAssemblyReference.cache
-C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\obj\Debug\EventCheckIn.Migrations.Rebuild.resources
-C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\obj\Debug\EventCheckIn.csproj.GenerateResource.Cache
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\obj\Debug\EventCheckIn.dll
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\obj\Debug\EventCheckIn.pdb
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\bin\Microsoft.CodeAnalysis.CSharp.dll
@@ -197,3 +195,5 @@ C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\bin\System.Composition
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\bin\System.Web.Cors.dll
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\bin\System.Web.Http.Cors.dll
 C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\bin\System.Web.Http.Cors.xml
+C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\obj\Debug\EventCheckIn.Migrations.Initial.resources
+C:\Users\Scott\Documents\GitHub\EventCheckIn\EventCheckIn\obj\Debug\EventCheckIn.csproj.GenerateResource.Cache

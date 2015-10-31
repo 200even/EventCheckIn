@@ -15,6 +15,9 @@ namespace EventCheckIn.Controllers
     public class EventsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        public static string EventName = "Food Coop Community Information Day";
+        public static DateTime EventStart = new DateTime(2015, 11, 17, 16, 00, 00);
+        public static DateTime EventEnd = new DateTime(2015, 11, 17, 23, 59, 59);
 
         // GET: Events
         public ActionResult Index()
@@ -189,7 +192,7 @@ namespace EventCheckIn.Controllers
             mail.To.Add(new MailAddress($"{attendee.Email}"));
             mail.Subject = "Thanks for checking in!";
             mail.IsBodyHtml = true;
-            string st = $"<div align='center'><img src='http://i.imgur.com/DSS1t1X.jpg' /></div><br /><div align='justified'><p>Your check-in for {myEvent.Name} is confirmed. You have attended {attendee.Events.Count()} events so far. <strong>Thank you</strong> for supporting the Little Rock tech scene!</p></div><footer><sub>Event check-in backend services created for Techtober by <a href='mailto:esfergus@gmail.com?Subject=Event%20Check-in%20Service' target='_top'>Scott Ferguson</a> in Little Rock, AR.</sub></footer>";
+            string st = $"<div align='center'><img src='http://i.imgur.com/QyBebyy.png' /></div><br /><div align='justified'><p>Your check-in for {myEvent.Name} is confirmed. <strong>Thank you</strong> for supporting the Little Rock food community!</p></div><footer><sub>Event check-in backend services created for Techtober by <a href='mailto:esfergus@gmail.com?Subject=Event%20Check-in%20Service' target='_top'>Scott Ferguson</a> in Little Rock, AR.</sub></footer>";
             mail.Body = st;
             smtp.Send(mail);
         }

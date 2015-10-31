@@ -7,13 +7,13 @@ namespace EventCheckIn.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Rebuild : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Rebuild));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201509300400355_Rebuild"; }
+            get { return "201510311745572_Initial"; }
         }
         
         string IMigrationMetadata.Source

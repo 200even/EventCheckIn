@@ -100,7 +100,7 @@ namespace EventCheckIn.Controllers
             {
                 SendConfirmation(attendee);
                 var response = new HttpResponseMessage();
-                response.Content = new StringContent($"<html><body><div align='center'><img style='max - width: 150px' src='http://i.imgur.com/DSS1t1X.jpg' /><br /><h1>Thanks {attendee.FirstName}!</h1><h2>You should receive a confirmation email shortly.</h2><p><a href='http://techtober.org/#passport'>Go back</a></div></body></html>");
+                response.Content = new StringContent($"<html><body><div align='center'><img style='max - width: 150px' src='http://i.imgur.com/QyBebyy.png' /><br /><h1>Thanks {attendee.FirstName}!</h1><h2>You should receive a confirmation email shortly.</h2><p><a href='http://techtober.org/#passport'>Go back</a></div></body></html>");
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
                 return response;
                 //return Ok();
@@ -140,49 +140,46 @@ namespace EventCheckIn.Controllers
 
         public static void SendConfirmation(Attendee attendee)
         {
-                string email = ConfigurationManager.AppSettings["email"];
-                string password = ConfigurationManager.AppSettings["password"];
-                MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(email);
-                SmtpClient smtp = new SmtpClient();
-                smtp.EnableSsl = true;
-                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential(mail.From.ToString(), password);
-                smtp.Host = "smtp.gmail.com";
-                mail.To.Add(new MailAddress($"{attendee.Email}"));
-                mail.Subject = "Thanks for registering for Techtober!";
-                mail.IsBodyHtml = true;
-                string st = $"<div align='center'><img style='max - width: 150px' src='http://i.imgur.com/DSS1t1X.jpg' /><br /><p>Thanks {attendee.FirstName}. Your registration is confirmed! Please have the below QR code ready when you arrive at each event. If no one is able to scan you in, <a href='techtober.azurewebsites.net/events/chooseevent/{attendee.Id}'>click here</a> to check yourself in.</p><h1>{attendee.FirstName} {attendee.LastName}</h1><br /><img src='https://chart.googleapis.com/chart?cht=qr&chl={attendee.QrCode}&chs=100x100' width='200' height='200' /><p><h2>Looking for an event to attend? Check out the Techtober <a href='http://startuparkansas.com/techtober'>events calendar</a> now!</h2></div><footer>Event check-in backend services created for Techtober by <a href='mailto:esfergus@gmail.com?Subject=Event%20Check-in%20Service' target='_top'>Scott Ferguson</a> in Little Rock, AR.</footer>";
-                mail.Body = st;
-                //Attachment attach = new Attachment(memoryStream, new ContentType("application/pdf"));
-                //attach.Name = "Check In Badge";
-                //mail.Attachments.Add(attach);
-                smtp.Port = 587;
-                try
+            string email = ConfigurationManager.AppSettings["email"];
+            string password = ConfigurationManager.AppSettings["password"];
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(email);
+            SmtpClient smtp = new SmtpClient();
+            smtp.EnableSsl = true;
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential(mail.From.ToString(), password);
+            smtp.Host = "smtp.gmail.com";
+            mail.To.Add(new MailAddress($"{attendee.Email}"));
+            mail.Subject = $"Thanks for registering for {EventsController.EventName}!";
+            mail.IsBodyHtml = true;
+            string st = $"<div align='center'><img style='max - width: 150px' src='http://i.imgur.com/QyBebyy.png' /><br /><p>Thanks {attendee.FirstName}. Your registration is confirmed! Please have the below QR code ready when you arrive at the event. <h1>{attendee.FirstName} {attendee.LastName}</h1><br /><img src='https://chart.googleapis.com/chart?cht=qr&chl={attendee.QrCode}&chs=100x100' width='200' height='200' /><p></div><footer>Event check-in backend services created by <a href='mailto:esfergus@gmail.com?Subject=Event%20Check-in%20Service' target='_top'>Scott Ferguson</a> in Little Rock, AR.</footer>";
+            mail.Body = st;
+            smtp.Port = 587;
+            try
+            {
+                smtp.Send(mail);
+            }
+            catch (SmtpFailedRecipientException ex)
+            {
+                SmtpStatusCode statusCode = ex.StatusCode;
+                if (statusCode == SmtpStatusCode.MailboxBusy ||
+                statusCode == SmtpStatusCode.MailboxUnavailable ||
+                statusCode == SmtpStatusCode.TransactionFailed)
                 {
+                    // wait 5 seconds, try a second time
+                    Thread.Sleep(5000);
                     smtp.Send(mail);
                 }
-                catch (SmtpFailedRecipientException ex)
+                else
                 {
-                    SmtpStatusCode statusCode = ex.StatusCode;
-                    if (statusCode == SmtpStatusCode.MailboxBusy ||
-                    statusCode == SmtpStatusCode.MailboxUnavailable ||
-                    statusCode == SmtpStatusCode.TransactionFailed)
-                    {
-                        // wait 5 seconds, try a second time
-                        Thread.Sleep(5000);
-                        smtp.Send(mail);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                finally
-                {
-                    mail.Dispose();
-                }
+            }
+            finally
+            {
+                mail.Dispose();
+            }
         }
 
         // DELETE: api/Attendees1/5
